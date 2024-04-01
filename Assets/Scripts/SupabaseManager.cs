@@ -14,14 +14,15 @@ public class SupabaseManager : MonoBehaviour
     //public string user_id = string.Empty;
     //public string user_pass = string.Empty;
 
-    [Header("Agrega Nuevo Usuario")]
-    public string new_user_id = string.Empty;
-    public string new_user_pass = string.Empty;
-    public int new_user_age = 0;
+    //[Header("Agrega Nuevo Usuario")]
+    //public string new_user_id = string.Empty;
+    //public string new_user_pass = string.Empty;
+    //public int new_user_age = 0;
 
     [Header("Campos de Interfaz")]
     [SerializeField] TMP_InputField _userIDInput;
     [SerializeField] TMP_InputField _userPassInput;
+    [SerializeField] TextMeshProUGUI _stateText;
 
     string supabaseUrl = "https://zkyndewjwgeydidqerqx.supabase.co";
     string supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpreW5kZXdqd2dleWRpZHFlcnF4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTEwMzM1MjQsImV4cCI6MjAyNjYwOTUyNH0.Mq1PucFgRp2Vyxv3tFZs709iSRmj2jV8oXvlzLmGBP0";
@@ -61,10 +62,14 @@ public class SupabaseManager : MonoBehaviour
         if (login_password.Model.password.Equals(_userPassInput.text))
         {
             print("LOGIN SUCCESSFUL");
+            _stateText.text = "LOGIN SUCCESSFUL";
+            _stateText.color = Color.green;
         }
         else
         {
             print("WRONG PASSWORD");
+            _stateText.text = "WRONG PASSWORD";
+            _stateText.color = Color.red;
         }
     }
 
