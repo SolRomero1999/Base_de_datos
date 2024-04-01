@@ -10,14 +10,6 @@ using System.Threading.Tasks;
 public class SupabaseManager : MonoBehaviour
 
 {
-    //[Header("Login")]
-    //public string user_id = string.Empty;
-    //public string user_pass = string.Empty;
-
-    //[Header("Agrega Nuevo Usuario")]
-    //public string new_user_id = string.Empty;
-    //public string new_user_pass = string.Empty;
-    //public int new_user_age = 0;
 
     [Header("Campos de Interfaz")]
     [SerializeField] TMP_InputField _userIDInput;
@@ -31,11 +23,6 @@ public class SupabaseManager : MonoBehaviour
 
     private usuarios _usuarios = new usuarios();
 
-    async void Start()
-    {
-        // UserLogin();
-
-    }
 
     public async void UserLogin()
     {
@@ -75,6 +62,10 @@ public class SupabaseManager : MonoBehaviour
 
     public async void InsertarNuevoUsuario()
     {
+
+        // Initialize the Supabase client
+        clientSupabase = new Supabase.Client(supabaseUrl, supabaseKey);
+
         // Consultar el último id utilizado (ID = index)
         var ultimoId = await clientSupabase
             .From<usuarios>()
@@ -92,13 +83,7 @@ public class SupabaseManager : MonoBehaviour
         // Crear el nuevo usuario con el nuevo id
         var nuevoUsuario = new usuarios
         {
-            //PARA HACERLO DESDE EL INSPECTOR
-            //id = nuevoId,
-            //username = new_user_id,
-            //age = new_user_age,
-            //password = new_user_pass
 
-            //PARA HACERLO DESDE LA UI
             id = nuevoId,
             username = _userIDInput.text,
             age = Random.Range(0, 100), //luego creo el campo que falta en la UI
@@ -111,15 +96,20 @@ public class SupabaseManager : MonoBehaviour
             .From<usuarios>()
             .Insert(new[] { nuevoUsuario });
 
-        //// Verificar si la inserción fue exitosa
-        //if (resultado.Error == null)
-        //{
-        //    Debug.Log("Usuario agregado exitosamente");
-        //}
-        //else
-        //{
-        //    Debug.LogError("Error al agregar usuario: " + resultado.Error.Message);
-        //}
+
+        //verifico el estado de la inserción 
+        if (resultado.ResponseMessage.IsSuccessStatusCode)
+        {
+            _stateText.text = "Usuario Correctamente Ingresado";
+            _stateText.color = Color.green;
+        }
+        else
+        {
+            _stateText.text = "Error en el registro de usuario";
+            _stateText.text = resultado.ResponseMessage.ToString();
+            _stateText.color = Color.green;
+        }
+
     }
 }
 
