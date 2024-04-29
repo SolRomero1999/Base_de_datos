@@ -1,6 +1,6 @@
-# UNRaf Databases Subject Final Project Repository
+# UNRaf - Curso: Bases de Datos - Final Project Repository
 
-This repository is specifically created for the students of the databases subject at UNRaf, so they can use it as a foundation for their final project in the subject.
+This repository is specifically created for the students of the databases course at UNRaf, so they can use it as a foundation for their final project.
 
 ## IMPORTANT!!
 
@@ -11,7 +11,7 @@ This repository is specifically created for the students of the databases subjec
 1. **Install NuGet for Unity:**
    - Install the third-party repository manager NuGet from the Package Manager by adding a new repository from git:
      - Documentation: [NuGetForUnity Documentation](https://github.com/GlitchEnzo/NuGetForUnity)
-     - [NuGetForUnity Repository](https://github.com/GlitchEnzo/NuGetForUnity.git?path=/src/NuGetForUnity)
+     - Repositorio: [NuGetForUnity Repository](https://github.com/GlitchEnzo/NuGetForUnity.git?path=/src/NuGetForUnity)
    - Note: If it doesn't appear once installed (usually next to Services), close and reopen the project.
 
 2. **Install Supabase-csharp:**
