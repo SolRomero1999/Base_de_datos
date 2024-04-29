@@ -9,8 +9,9 @@ This repository is specifically created for the students of the databases subjec
 ### Setup Instructions:
 
 1. **Install NuGet for Unity:**
-   - Install the third-party repository manager NuGet from the Package Manager by adding a new repository from git: [NuGetForUnity Repository](https://github.com/GlitchEnzo/NuGetForUnity.git?path=/src/NuGetForUnity)
+   - Install the third-party repository manager NuGet from the Package Manager by adding a new repository from git:
      - Documentation: [NuGetForUnity Documentation](https://github.com/GlitchEnzo/NuGetForUnity)
+     - [NuGetForUnity Repository](https://github.com/GlitchEnzo/NuGetForUnity.git?path=/src/NuGetForUnity)
    - Note: If it doesn't appear once installed (usually next to Services), close and reopen the project.
 
 2. **Install Supabase-csharp:**
