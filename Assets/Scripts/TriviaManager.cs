@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class TriviaManager : MonoBehaviour
 {
-    public Question[] questions;
+    public question[] questions;
     public int totalTrivias;
     private int currentQuestionIndex = 0;
 

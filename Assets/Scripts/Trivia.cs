@@ -1,23 +1,16 @@
 using Postgrest.Models;
 using Postgrest.Attributes;
+using System.Collections.Generic;
 
-public class Trivia : BaseModel
+public class trivia : BaseModel
 {
     [Column("id"), PrimaryKey]
     public int id { get; set; }
 
-    [Column("question")]
-    public string question { get; set; }
+    [Column("Category")]
+    public string category { get; set; }
 
-    [Column("answer1")]
-    public string answer1 { get; set; }
-
-    [Column("answer2")]
-    public string answer2 { get; set; }
-
-    [Column("answer3")]
-    public string opcion3 { get; set; }
-
-    [Column("correct_answer")]
-    public int correct_answer { get; set; }
+    // Lista de preguntas asociadas a esta trivia
+    public List<question> questions { get; set; }
 }
+

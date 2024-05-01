@@ -1,28 +1,16 @@
 using UnityEngine;
 using Supabase;
 using Supabase.Interfaces;
-using System.Threading;
-using Postgrest.Models;
-using TMPro;
-using UnityEngine.UI;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using Unity.VisualScripting;
+using Postgrest.Models;
 
 public class DatabaseManager : MonoBehaviour
-
 {
-
-    //[Header("Campos de Interfaz")]
-    //[SerializeField] TMP_InputField _userIDInput;
-    //[SerializeField] TMP_InputField _userPassInput;
-    //[SerializeField] TextMeshProUGUI _stateText;
-
     string supabaseUrl = "https://zkyndewjwgeydidqerqx.supabase.co";
     string supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpreW5kZXdqd2dleWRpZHFlcnF4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTEwMzM1MjQsImV4cCI6MjAyNjYwOTUyNH0.Mq1PucFgRp2Vyxv3tFZs709iSRmj2jV8oXvlzLmGBP0";
 
     Supabase.Client clientSupabase;
-
 
     void Start()
     {
@@ -36,29 +24,67 @@ public class DatabaseManager : MonoBehaviour
     async void LoadData()
     {
         // Cargar trivias desde la base de datos
-        List<Trivia> trivias = await LoadTrivias();
+        //List<Trivia> trivias = await LoadTrivias();
 
-        // Hacer algo con los datos cargados, por ejemplo, pasarlos al TriviaManager
-        //TriviaManager.InitializeTrivias(trivias);
-    }
-
-
-     async Task<List<Trivia>> LoadTrivias()
-    {
+        // Hacer algo con los datos cargados, por ejemplo, pasarlos al GameManager
+        //GameManager.InitializeTrivias(trivias);
         var response = await clientSupabase
-            .From<Trivia>()
+            .From<question>()
             .Select("*")
             .Get();
 
-        if (response != null)
-        {
-            Debug.LogError("Error loading trivias: " + response);
-            return null;
-        }
-
-        List<Trivia> trivias = response.Models;
-        return trivias;
+        print(response.Model.Answer1);
     }
+
+    //async Task<List<Trivia>> LoadTrivias()
+    //{
+    //    var response = await clientSupabase
+    //        .From<Trivia>()
+    //        .Select("*")
+    //        .Get();
+
+    //    if (response != null)
+    //    {
+    //        // La operación se completó correctamente y hay datos disponibles
+    //        List<Trivia> trivias = response.Models;
+    //        foreach (var trivia in trivias)
+    //        {
+    //            // Cargar las preguntas asociadas a esta trivia
+    //            trivia.questions = await LoadQuestionsForTrivia(trivia);
+    //        }
+    //        return trivias;
+    //    }
+    //    else
+    //    {
+    //        // Hubo un error en la operación
+    //        Debug.LogError("Error loading trivias: " + response.ToString());
+    //        return null;
+    //    }
+    //}
+
+    //async Task<List<Question>> LoadQuestionsForTrivia(Trivia trivia)
+    //{
+    //    var response = await clientSupabase
+    //        .From<Question>()
+    //        .Where(Question => Question.trivia_id == trivia.id)
+    //        .Select("*")
+    //        .Get();
+
+    //    if (response != null)
+    //    {
+    //        // La operación se completó correctamente y hay datos disponibles
+    //        List<Question> questions = response.Models;
+    //        return questions;
+    //    }
+    //    else
+    //    {
+    //        // Hubo un error en la operación
+    //        Debug.LogError("Error loading questions for trivia " + trivia.id + ": " + response.ToString());
+    //        return null;
+    //    }
+    //}
+}
+
 
 
 
@@ -156,5 +182,5 @@ public class DatabaseManager : MonoBehaviour
     //    }
 
     //}
-}
+//}
 

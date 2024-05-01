@@ -1,9 +1,25 @@
-using UnityEngine;
+using Postgrest.Models;
+using Postgrest.Attributes;
 
-[System.Serializable]
-public class Question
+public class question : BaseModel
 {
-    public string questionText;
-    public string[] options;
-    public int correctOptionIndex;
+    [Column("id"), PrimaryKey]
+    public int Id { get; set; }
+
+    [Column("question")]
+    public string QuestionText { get; set; }
+
+    [Column("answer1")]
+    public string Answer1 { get; set; }
+
+    [Column("answer2")]
+    public string Answer2 { get; set; }
+
+    [Column("answer3")]
+    public string Option3 { get; set; }
+
+    [Column("correct_answer")]
+    public string CorrectOption { get; set; }
+
+    public int trivia_id { get; set; } // El nombre de la propiedad puede ser diferente, pero el tipo de dato debe ser el mismo que la clave principal de la clase Trivia
 }
