@@ -24,163 +24,58 @@ public class DatabaseManager : MonoBehaviour
     async void LoadData()
     {
         // Cargar trivias desde la base de datos
-        //List<Trivia> trivias = await LoadTrivias();
+        List<trivia> trivias = await LoadTrivias();
 
-        // Hacer algo con los datos cargados, por ejemplo, pasarlos al GameManager
+        // Pasar datos cargados al GameManager
         //GameManager.InitializeTrivias(trivias);
+    }
+
+    async Task<List<trivia>> LoadTrivias()
+    {
         var response = await clientSupabase
-            .From<question>()
+            .From<trivia>()
             .Select("*")
             .Get();
 
-        print(response.Model.Answer1);
+        if (response != null)
+        {
+            // La operación se completó correctamente y hay datos disponibles
+            List<trivia> trivias = response.Models;
+
+            foreach (var trivia in trivias)
+            {
+                // Cargar las preguntas asociadas a esta trivia
+                trivia.questions = await LoadQuestionsForTrivia(trivia);
+            }
+            return trivias;
+        }
+        else
+        {
+            // Hubo un error en la operación
+            Debug.LogError("Error loading trivias: " + response.ToString());
+            return null;
+        }
     }
 
-    //async Task<List<Trivia>> LoadTrivias()
-    //{
-    //    var response = await clientSupabase
-    //        .From<Trivia>()
-    //        .Select("*")
-    //        .Get();
+    async Task<List<question>> LoadQuestionsForTrivia(trivia trivia)
+    {
+        var response = await clientSupabase
+            .From<question>()
+            .Where(Question => Question.trivia_id == trivia.id)
+            .Select("*")
+            .Get();
 
-    //    if (response != null)
-    //    {
-    //        // La operación se completó correctamente y hay datos disponibles
-    //        List<Trivia> trivias = response.Models;
-    //        foreach (var trivia in trivias)
-    //        {
-    //            // Cargar las preguntas asociadas a esta trivia
-    //            trivia.questions = await LoadQuestionsForTrivia(trivia);
-    //        }
-    //        return trivias;
-    //    }
-    //    else
-    //    {
-    //        // Hubo un error en la operación
-    //        Debug.LogError("Error loading trivias: " + response.ToString());
-    //        return null;
-    //    }
-    //}
-
-    //async Task<List<Question>> LoadQuestionsForTrivia(Trivia trivia)
-    //{
-    //    var response = await clientSupabase
-    //        .From<Question>()
-    //        .Where(Question => Question.trivia_id == trivia.id)
-    //        .Select("*")
-    //        .Get();
-
-    //    if (response != null)
-    //    {
-    //        // La operación se completó correctamente y hay datos disponibles
-    //        List<Question> questions = response.Models;
-    //        return questions;
-    //    }
-    //    else
-    //    {
-    //        // Hubo un error en la operación
-    //        Debug.LogError("Error loading questions for trivia " + trivia.id + ": " + response.ToString());
-    //        return null;
-    //    }
-    //}
+        if (response != null)
+        {
+            // La operación se completó correctamente y hay datos disponibles
+            List<question> questions = response.Models;
+            return questions;
+        }
+        else
+        {
+            // Hubo un error en la operación
+            Debug.LogError("Error loading questions for trivia " + trivia.id + ": " + response.ToString());
+            return null;
+        }
+    }
 }
-
-
-
-
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-    //private usuarios _usuarios = new usuarios();
-
-
-    //public async void UserLogin()
-    //{
-    //    // Initialize the Supabase client
-    //    clientSupabase = new Supabase.Client(supabaseUrl, supabaseKey);
-
-    //    // prueba
-    //    var test_response = await clientSupabase
-    //        .From<usuarios>()
-    //        .Select("*")
-    //        .Get();
-    //    Debug.Log(test_response.Content);
-
-
-
-    //    // filtro según datos de login
-    //    var login_password = await clientSupabase
-    //      .From<usuarios>()
-    //      .Select("password")
-    //      .Where(usuarios => usuarios.username == _userIDInput.text)
-    //      .Get();
-
-
-    //    if (login_password.Model.password.Equals(_userPassInput.text))
-    //    {
-    //        print("LOGIN SUCCESSFUL");
-    //        _stateText.text = "LOGIN SUCCESSFUL";
-    //        _stateText.color = Color.green;
-    //    }
-    //    else
-    //    {
-    //        print("WRONG PASSWORD");
-    //        _stateText.text = "WRONG PASSWORD";
-    //        _stateText.color = Color.red;
-    //    }
-    //}
-
-    //public async void InsertarNuevoUsuario()
-    //{
-
-    //    // Initialize the Supabase client
-    //    clientSupabase = new Supabase.Client(supabaseUrl, supabaseKey);
-
-    //    // Consultar el último id utilizado (ID = index)
-    //    var ultimoId = await clientSupabase
-    //        .From<usuarios>()
-    //        .Select("id")
-    //        .Order(usuarios => usuarios.id, Postgrest.Constants.Ordering.Descending) // Ordenar en orden descendente para obtener el último id
-    //        .Get();
-
-    //    int nuevoId = 1; // Valor predeterminado si la tabla está vacía
-
-    //    if (ultimoId != null)
-    //    {
-    //        nuevoId = ultimoId.Model.id + 1; // Incrementar el último id
-    //    }
-
-    //    // Crear el nuevo usuario con el nuevo id
-    //    var nuevoUsuario = new usuarios
-    //    {
-
-    //        id = nuevoId,
-    //        username = _userIDInput.text,
-    //        age = Random.Range(0, 100), //luego creo el campo que falta en la UI
-    //        password = _userPassInput.text,
-    //    };
-
-
-    //    // Insertar el nuevo usuario
-    //    var resultado = await clientSupabase
-    //        .From<usuarios>()
-    //        .Insert(new[] { nuevoUsuario });
-
-
-    //    //verifico el estado de la inserción 
-    //    if (resultado.ResponseMessage.IsSuccessStatusCode)
-    //    {
-    //        _stateText.text = "Usuario Correctamente Ingresado";
-    //        _stateText.color = Color.green;
-    //    }
-    //    else
-    //    {
-    //        _stateText.text = "Error en el registro de usuario";
-    //        _stateText.text = resultado.ResponseMessage.ToString();
-    //        _stateText.color = Color.green;
-    //    }
-
-    //}
-//}
-
