@@ -21,5 +21,8 @@ public class question : BaseModel
     [Column("correct_answer")]
     public string CorrectOption { get; set; }
 
-    public int trivia_id { get; set; } // El nombre de la propiedad puede ser diferente, pero el tipo de dato debe ser el mismo que la clave principal de la clase Trivia
+    public int trivia_id { get; set; }
+
+    public trivia trivia {get; set; }
+
 }

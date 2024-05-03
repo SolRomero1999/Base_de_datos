@@ -12,70 +12,32 @@ public class DatabaseManager : MonoBehaviour
 
     Supabase.Client clientSupabase;
 
-    void Start()
+    async void Start()
     {
-        // Configurar la conexión a Supabase
         clientSupabase = new Supabase.Client(supabaseUrl, supabaseKey);
 
-        // Cargar datos al inicio del juego
-        LoadData();
+        int index = Random.Range(1, 3);
+        print(index);
+
+        await LoadData(index);
     }
 
-    async void LoadData()
-    {
-        // Cargar trivias desde la base de datos
-        List<trivia> trivias = await LoadTrivias();
-
-        // Pasar datos cargados al GameManager
-        //GameManager.InitializeTrivias(trivias);
-    }
-
-    async Task<List<trivia>> LoadTrivias()
-    {
-        var response = await clientSupabase
-            .From<trivia>()
-            .Select("*")
-            .Get();
-
-        if (response != null)
-        {
-            // La operación se completó correctamente y hay datos disponibles
-            List<trivia> trivias = response.Models;
-
-            foreach (var trivia in trivias)
-            {
-                // Cargar las preguntas asociadas a esta trivia
-                trivia.questions = await LoadQuestionsForTrivia(trivia);
-            }
-            return trivias;
-        }
-        else
-        {
-            // Hubo un error en la operación
-            Debug.LogError("Error loading trivias: " + response.ToString());
-            return null;
-        }
-    }
-
-    async Task<List<question>> LoadQuestionsForTrivia(trivia trivia)
+    async Task LoadData(int index)
     {
         var response = await clientSupabase
             .From<question>()
-            .Where(Question => Question.trivia_id == trivia.id)
-            .Select("*")
+            .Where(question => question.Id == index)
+            .Select("id, question, correct_answer, trivia_id, trivia(id, category)") 
             .Get();
+        
+        string questions = response.Models[0].QuestionText;
+        string correct_answer = response.Models[0].CorrectOption;
+        string triviaName = response.Models[0].trivia.category;
 
-        if (response != null)
-        {
-            // La operación se completó correctamente y hay datos disponibles
-            List<question> questions = response.Models;
-            return questions;
-        }
-        else
-        {
-            // Hubo un error en la operación
-            Debug.LogError("Error loading questions for trivia " + trivia.id + ": " + response.ToString());
-            return null;
-        }
+        Debug.Log("Pregunta: " + questions);
+        Debug.Log("Respuesta: " + correct_answer);
+        Debug.Log("Trivia: " + triviaName);
+
+
     }
 }
