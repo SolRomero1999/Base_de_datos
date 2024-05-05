@@ -12,12 +12,45 @@ public class DatabaseManager : MonoBehaviour
 
     Supabase.Client clientSupabase;
 
+    public int index;
+    private string _selectedTrivia;
+
+    //UI
+    [SerializeField] private 
+
+    /// <summary>
+    /// //////
+    /// </summary>
+    //public static DatabaseManager Instance { get; private set; }
+
+
+
+    //void Awake()
+    //{
+    //    // Configura la instancia
+    //    if (Instance == null)
+    //    {
+    //        Instance = this;
+    //        DontDestroyOnLoad(gameObject); // Opcional, para mantener el objeto entre escenas
+    //    }
+    //    else
+    //    {
+    //        Destroy(gameObject);
+    //    }
+    //}
+
+    /// <summary>
+    /// /////////
+    /// </summary>
+
     async void Start()
     {
         clientSupabase = new Supabase.Client(supabaseUrl, supabaseKey);
+        
+        index = PlayerPrefs.GetInt("SelectedIndex");
+        _selectedTrivia = PlayerPrefs.GetString("SelectedTrivia");
 
-        int index = Random.Range(1, 3);
-        print(index);
+        print(_selectedTrivia);
 
         await LoadData(index);
     }
@@ -26,10 +59,10 @@ public class DatabaseManager : MonoBehaviour
     {
         var response = await clientSupabase
             .From<question>()
-            .Where(question => question.Id == index)
-            .Select("id, question, correct_answer, trivia_id, trivia(id, category)") 
+            .Where(question => question.trivia_id == index)
+            .Select("id, question, correct_answer, trivia_id, trivia(id, category)")
             .Get();
-        
+
         string questions = response.Models[0].QuestionText;
         string correct_answer = response.Models[0].CorrectOption;
         string triviaName = response.Models[0].trivia.category;
