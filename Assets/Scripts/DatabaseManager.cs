@@ -43,7 +43,7 @@ public class DatabaseManager : MonoBehaviour
         GameManager.Instance.triviaName = response.Models[0].trivia.category;
 
         GameManager.Instance.responseList = response.Models;
-        print(GameManager.Instance.responseList[1].QuestionText);
+        //print(GameManager.Instance.responseList[0].QuestionText);
 
 
 

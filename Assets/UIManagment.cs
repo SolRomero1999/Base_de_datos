@@ -9,19 +9,23 @@ public class UIManagment : MonoBehaviour
 
     
     [SerializeField] TextMeshProUGUI _categoryText;
+    [SerializeField] TextMeshProUGUI _questionText;
+
     [SerializeField] Button[] _buttons = new Button[3];
 
-    List<question> questions = new List<question>();
+    private int _questionSelected;
 
     private void Start()
     {
-        questions = GameManager.Instance.responseList;
+        
     }
 
     void Update()
     {
         _categoryText.text = GameManager.Instance.triviaName;
 
-        print(GameManager.Instance.responseList[1].QuestionText);
+        _questionText.text = GameManager.Instance.responseList[1].QuestionText;
+
+        //print(GameManager.Instance.responseList[0].QuestionText);
     }
 }
