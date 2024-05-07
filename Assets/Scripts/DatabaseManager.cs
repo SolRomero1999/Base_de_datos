@@ -18,30 +18,6 @@ public class DatabaseManager : MonoBehaviour
     //UI
     [SerializeField] private 
 
-    /// <summary>
-    /// //////
-    /// </summary>
-    //public static DatabaseManager Instance { get; private set; }
-
-
-
-    //void Awake()
-    //{
-    //    // Configura la instancia
-    //    if (Instance == null)
-    //    {
-    //        Instance = this;
-    //        DontDestroyOnLoad(gameObject); // Opcional, para mantener el objeto entre escenas
-    //    }
-    //    else
-    //    {
-    //        Destroy(gameObject);
-    //    }
-    //}
-
-    /// <summary>
-    /// /////////
-    /// </summary>
 
     async void Start()
     {
@@ -50,12 +26,12 @@ public class DatabaseManager : MonoBehaviour
         index = PlayerPrefs.GetInt("SelectedIndex");
         _selectedTrivia = PlayerPrefs.GetString("SelectedTrivia");
 
-        print(_selectedTrivia);
+        //print(_selectedTrivia);
 
-        await LoadData(index);
+        await LoadTriviaData(index);
     }
 
-    async Task LoadData(int index)
+    async Task LoadTriviaData(int index)
     {
         var response = await clientSupabase
             .From<question>()
@@ -63,14 +39,29 @@ public class DatabaseManager : MonoBehaviour
             .Select("id, question, correct_answer, trivia_id, trivia(id, category)")
             .Get();
 
-        string questions = response.Models[0].QuestionText;
-        string correct_answer = response.Models[0].CorrectOption;
-        string triviaName = response.Models[0].trivia.category;
+        GameManager.Instance.currentTriviaIndex = index;
+        GameManager.Instance.triviaName = response.Models[0].trivia.category;
 
-        Debug.Log("Pregunta: " + questions);
-        Debug.Log("Respuesta: " + correct_answer);
-        Debug.Log("Trivia: " + triviaName);
+        GameManager.Instance.responseList = response.Models;
+        print(GameManager.Instance.responseList[1].QuestionText);
+
+
+
+
+        //foreach (var item in response.Models)
+        //{
+        //    GameManager.Instance._responseList.Add(item);
+        //}
+
+        //string questions = response.Models[0].QuestionText;
+        //string correct_answer = response.Models[0].CorrectOption;
+        //string triviaName = response.Models[0].trivia.category;
+
+        //Debug.Log("Pregunta: " + questions);
+        //Debug.Log("Respuesta: " + correct_answer);
+        //Debug.Log("Trivia: " + triviaName);
 
 
     }
+
 }
