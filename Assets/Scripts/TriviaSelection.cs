@@ -70,6 +70,7 @@ public class TriviaSelection : MonoBehaviour
         PlayerPrefs.SetInt("SelectedIndex", selectedIndex+1);
         PlayerPrefs.SetString("SelectedTrivia", selectedTrivia);
 
+
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 

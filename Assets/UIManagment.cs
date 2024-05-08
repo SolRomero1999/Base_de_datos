@@ -13,18 +13,29 @@ public class UIManagment : MonoBehaviour
 
     [SerializeField] Button[] _buttons = new Button[3];
 
-    private int _questionSelected;
+    private bool queryCalled;
+
 
     private void Start()
     {
-        
+        queryCalled = false;
     }
 
     void Update()
     {
-        _categoryText.text = GameManager.Instance.triviaName;
+        CategoryAndQuestionQuery();
+    }
 
-        _questionText.text = GameManager.Instance.responseList[1].QuestionText;
+    private void CategoryAndQuestionQuery()
+    {
+        if (!queryCalled)
+        {
+            _categoryText.text = PlayerPrefs.GetString("SelectedTrivia");
+
+            _questionText.text = GameManager.Instance.responseList[Random.Range(0, GameManager.Instance.responseList.Count)].QuestionText;
+
+            queryCalled = true;
+        }
 
         //print(GameManager.Instance.responseList[0].QuestionText);
     }

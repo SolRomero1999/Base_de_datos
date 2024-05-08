@@ -13,7 +13,6 @@ public class DatabaseManager : MonoBehaviour
     Supabase.Client clientSupabase;
 
     public int index;
-    private string _selectedTrivia;
 
     //UI
     [SerializeField] private 
@@ -24,7 +23,6 @@ public class DatabaseManager : MonoBehaviour
         clientSupabase = new Supabase.Client(supabaseUrl, supabaseKey);
         
         index = PlayerPrefs.GetInt("SelectedIndex");
-        _selectedTrivia = PlayerPrefs.GetString("SelectedTrivia");
 
         //print(_selectedTrivia);
 
@@ -40,9 +38,16 @@ public class DatabaseManager : MonoBehaviour
             .Get();
 
         GameManager.Instance.currentTriviaIndex = index;
-        GameManager.Instance.triviaName = response.Models[0].trivia.category;
 
         GameManager.Instance.responseList = response.Models;
+
+        print("Response from query: "+ response.Models.Count);
+        print("ResponseList from GM: "+ GameManager.Instance.responseList.Count);
+
+        //print(GameManager.Instance.currentTriviaIndex);
+        //print(GameManager.Instance.responseList.Count);
+
+
         //print(GameManager.Instance.responseList[0].QuestionText);
 
 

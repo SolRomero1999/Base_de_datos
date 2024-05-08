@@ -8,7 +8,6 @@ public class GameManager : MonoBehaviour
     public List<question> responseList; //lista donde guardo la respuesta de la query hecha en la pantalla de selección de categoría
 
     public int currentTriviaIndex = 0;
-    public string triviaName;
 
     public static GameManager Instance { get; private set; }
 
@@ -31,6 +30,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+
         StartTrivia();
 
     }
@@ -40,6 +40,7 @@ public class GameManager : MonoBehaviour
         // Cargar la trivia desde la base de datos
         //triviaManager.LoadTrivia(currentTriviaIndex);
 
+        //print(responseList.Count);
 
     }
 
