@@ -33,7 +33,6 @@ public class UIManagment : MonoBehaviour
     {
         CategoryAndQuestionQuery();
 
-
     }
 
     private void CategoryAndQuestionQuery()
