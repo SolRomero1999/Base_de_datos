@@ -16,7 +16,7 @@ public class question : BaseModel
     public string Answer2 { get; set; }
 
     [Column("answer3")]
-    public string Option3 { get; set; }
+    public string Answer3 { get; set; }
 
     [Column("correct_answer")]
     public string CorrectOption { get; set; }

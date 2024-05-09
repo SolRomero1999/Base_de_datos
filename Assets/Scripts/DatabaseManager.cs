@@ -34,7 +34,7 @@ public class DatabaseManager : MonoBehaviour
         var response = await clientSupabase
             .From<question>()
             .Where(question => question.trivia_id == index)
-            .Select("id, question, correct_answer, trivia_id, trivia(id, category)")
+            .Select("id, question, answer1, answer2, answer3, correct_answer, trivia_id, trivia(id, category)")
             .Get();
 
         GameManager.Instance.currentTriviaIndex = index;
