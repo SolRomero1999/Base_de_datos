@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class UIManagment : MonoBehaviour
 {
@@ -14,6 +15,8 @@ public class UIManagment : MonoBehaviour
     string _correctAnswer;
 
     public Button[] _buttons = new Button[3];
+
+    [SerializeField] Button _backButton;
 
     private List<string> _answers = new List<string>();
 
@@ -99,6 +102,14 @@ public class UIManagment : MonoBehaviour
     private void NextAnswer()
     {
         queryCalled = false;
+    }
+
+    public void PreviousScene()
+    {
+        Destroy(GameManager.Instance);
+        Destroy(UIManagment.Instance);
+
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
     }
 
 
