@@ -61,8 +61,10 @@ public class UIManagment : MonoBehaviour
     }
     public void OnButtonClick(int buttonIndex)
     {
-        _correctAnswer = GameManager.Instance.responseList[GameManager.Instance.randomQuestionIndex].CorrectOption;
+        
         string selectedAnswer = _buttons[buttonIndex].GetComponentInChildren<TextMeshProUGUI>().text;
+
+        _correctAnswer = GameManager.Instance.responseList[GameManager.Instance.randomQuestionIndex].CorrectOption;
 
         if (selectedAnswer == _correctAnswer)
         {

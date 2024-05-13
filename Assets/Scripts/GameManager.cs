@@ -16,6 +16,12 @@ public class GameManager : MonoBehaviour
 
     public bool queryCalled;
 
+    private int _points;
+
+    private int _maxAttempts = 10;
+
+    public int _numQuestionAnswered = 0;
+
     string _correctAnswer;
 
     public static GameManager Instance { get; private set; }
@@ -93,6 +99,7 @@ public class GameManager : MonoBehaviour
         }
 
     }
+
 
     private void Update()
     {
