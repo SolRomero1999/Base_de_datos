@@ -44,27 +44,7 @@ public class DatabaseManager : MonoBehaviour
         print("Response from query: "+ response.Models.Count);
         print("ResponseList from GM: "+ GameManager.Instance.responseList.Count);
 
-        //print(GameManager.Instance.currentTriviaIndex);
-        //print(GameManager.Instance.responseList.Count);
-
-
-        //print(GameManager.Instance.responseList[0].QuestionText);
-
-
-
-
-        //foreach (var item in response.Models)
-        //{
-        //    GameManager.Instance._responseList.Add(item);
-        //}
-
-        //string questions = response.Models[0].QuestionText;
-        //string correct_answer = response.Models[0].CorrectOption;
-        //string triviaName = response.Models[0].trivia.category;
-
-        //Debug.Log("Pregunta: " + questions);
-        //Debug.Log("Respuesta: " + correct_answer);
-        //Debug.Log("Trivia: " + triviaName);
+    
 
 
     }

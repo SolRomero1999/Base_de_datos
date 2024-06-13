@@ -5,10 +5,10 @@ public class AnswerButton : MonoBehaviour
 {
     public Text answerText;
     public int answerIndex;
-    public TriviaManager triviaManager;
+    //public TriviaManager triviaManager;
 
     public void OnClick()
     {
-        triviaManager.CheckAnswer(answerIndex);
+        //triviaManager.CheckAnswer(answerIndex);
     }
 }
