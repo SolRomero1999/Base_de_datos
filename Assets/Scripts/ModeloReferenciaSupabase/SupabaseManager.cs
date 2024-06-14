@@ -10,31 +10,19 @@ using System.Threading.Tasks;
 public class SupabaseManager : MonoBehaviour
 
 {
-    //[Header("Login")]
-    //public string user_id = string.Empty;
-    //public string user_pass = string.Empty;
-
-    [Header("Agrega Nuevo Usuario")]
-    public string new_user_id = string.Empty;
-    public string new_user_pass = string.Empty;
-    public int new_user_age = 0;
 
     [Header("Campos de Interfaz")]
     [SerializeField] TMP_InputField _userIDInput;
     [SerializeField] TMP_InputField _userPassInput;
+    [SerializeField] TextMeshProUGUI _stateText;
 
-    string supabaseUrl = "https://zkyndewjwgeydidqerqx.supabase.co";
-    string supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpreW5kZXdqd2dleWRpZHFlcnF4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTEwMzM1MjQsImV4cCI6MjAyNjYwOTUyNH0.Mq1PucFgRp2Vyxv3tFZs709iSRmj2jV8oXvlzLmGBP0";
+    string supabaseUrl = "url"; //COMPLETAR
+    string supabaseKey = "key"; //COMPLETAR
 
     Supabase.Client clientSupabase;
 
     private usuarios _usuarios = new usuarios();
 
-    async void Start()
-    {
-        // UserLogin();
-
-    }
 
     public async void UserLogin()
     {
@@ -61,15 +49,23 @@ public class SupabaseManager : MonoBehaviour
         if (login_password.Model.password.Equals(_userPassInput.text))
         {
             print("LOGIN SUCCESSFUL");
+            _stateText.text = "LOGIN SUCCESSFUL";
+            _stateText.color = Color.green;
         }
         else
         {
             print("WRONG PASSWORD");
+            _stateText.text = "WRONG PASSWORD";
+            _stateText.color = Color.red;
         }
     }
 
     public async void InsertarNuevoUsuario()
     {
+
+        // Initialize the Supabase client
+        clientSupabase = new Supabase.Client(supabaseUrl, supabaseKey);
+
         // Consultar el último id utilizado (ID = index)
         var ultimoId = await clientSupabase
             .From<usuarios>()
@@ -87,13 +83,7 @@ public class SupabaseManager : MonoBehaviour
         // Crear el nuevo usuario con el nuevo id
         var nuevoUsuario = new usuarios
         {
-            //PARA HACERLO DESDE EL INSPECTOR
-            //id = nuevoId,
-            //username = new_user_id,
-            //age = new_user_age,
-            //password = new_user_pass
 
-            //PARA HACERLO DESDE LA UI
             id = nuevoId,
             username = _userIDInput.text,
             age = Random.Range(0, 100), //luego creo el campo que falta en la UI
@@ -106,15 +96,20 @@ public class SupabaseManager : MonoBehaviour
             .From<usuarios>()
             .Insert(new[] { nuevoUsuario });
 
-        //// Verificar si la inserción fue exitosa
-        //if (resultado.Error == null)
-        //{
-        //    Debug.Log("Usuario agregado exitosamente");
-        //}
-        //else
-        //{
-        //    Debug.LogError("Error al agregar usuario: " + resultado.Error.Message);
-        //}
+
+        //verifico el estado de la inserción 
+        if (resultado.ResponseMessage.IsSuccessStatusCode)
+        {
+            _stateText.text = "Usuario Correctamente Ingresado";
+            _stateText.color = Color.green;
+        }
+        else
+        {
+            _stateText.text = "Error en el registro de usuario";
+            _stateText.text = resultado.ResponseMessage.ToString();
+            _stateText.color = Color.green;
+        }
+
     }
 }
 
