@@ -147,6 +147,13 @@
             <param name="options"></param>
             <returns></returns>
         </member>
+        <member name="M:Supabase.Gotrue.Api.SignInAnonymously(Supabase.Gotrue.SignInAnonymouslyOptions)">
+            <summary>
+            Creates a new anonymous user.
+            </summary>
+            <param name="options"></param>
+            <returns>A session where the is_anonymous claim in the access token JWT set to true</returns>
+        </member>
         <member name="M:Supabase.Gotrue.Api.SignInWithIdToken(Supabase.Gotrue.Constants.Provider,System.String,System.String,System.String)">
             <summary>
             Allows signing in with an ID token issued by certain supported providers.
@@ -340,7 +347,8 @@
             <summary>
             Calls the GoTrue server to get the settings (for example, if email auto confirmation is turned on)
             </summary>
-            <returns></returns>
+            <returns>mpose up -d
+            </returns>
         </member>
         <member name="M:Supabase.Gotrue.Api.GenerateLink(System.String,Supabase.Gotrue.GenerateLinkOptions)">
             <summary>
@@ -479,6 +487,9 @@
             <inheritdoc />
         </member>
         <member name="M:Supabase.Gotrue.Client.SignIn(Supabase.Gotrue.Constants.Provider,Supabase.Gotrue.SignInOptions)">
+            <inheritdoc />
+        </member>
+        <member name="M:Supabase.Gotrue.Client.SignInAnonymously(Supabase.Gotrue.SignInAnonymouslyOptions)">
             <inheritdoc />
         </member>
         <member name="M:Supabase.Gotrue.Client.VerifyOTP(System.String,System.String,Supabase.Gotrue.Constants.MobileOtpType)">
@@ -831,6 +842,36 @@
             Mapping of link types that can be generated.
             </summary>
         </member>
+        <member name="F:Supabase.Gotrue.GenerateLinkOptions.LinkType.SignUp">
+            <summary>
+            Generate a signup link.
+            </summary>
+        </member>
+        <member name="F:Supabase.Gotrue.GenerateLinkOptions.LinkType.Invite">
+            <summary>
+            Generate an invite link.
+            </summary>
+        </member>
+        <member name="F:Supabase.Gotrue.GenerateLinkOptions.LinkType.MagicLink">
+            <summary>
+            Generate a magic link.
+            </summary>
+        </member>
+        <member name="F:Supabase.Gotrue.GenerateLinkOptions.LinkType.Recovery">
+            <summary>
+            Generate a recovery link.
+            </summary>
+        </member>
+        <member name="F:Supabase.Gotrue.GenerateLinkOptions.LinkType.EmailChangeCurrent">
+            <summary>
+            Generate an email change link to be sent to the current email address.
+            </summary>
+        </member>
+        <member name="F:Supabase.Gotrue.GenerateLinkOptions.LinkType.EmailChangeNew">
+            <summary>
+            Generate an email change link to be sent to the new email address.
+            </summary>
+        </member>
         <member name="P:Supabase.Gotrue.GenerateLinkOptions.Type">
             <summary>
             The type of link being generated
@@ -879,15 +920,39 @@
             Shortcut options for <see cref="F:Supabase.Gotrue.GenerateLinkOptions.LinkType.SignUp"/>
             </summary>
         </member>
+        <member name="M:Supabase.Gotrue.GenerateLinkSignupOptions.#ctor(System.String,System.String)">
+            <summary>
+            Constructs options for <see cref="F:Supabase.Gotrue.GenerateLinkOptions.LinkType.SignUp"/>
+            </summary>
+            <param name="email"></param>
+            <param name="password"></param>
+            <remarks>
+            <see cref="P:Supabase.Gotrue.GenerateLinkOptions.Data"/> is optional
+            </remarks>
+        </member>
         <member name="T:Supabase.Gotrue.GenerateLinkEmailChangeCurrentOptions">
             <summary>
             Shortcut options for <see cref="F:Supabase.Gotrue.GenerateLinkOptions.LinkType.EmailChangeCurrent"/>
             </summary>
         </member>
+        <member name="M:Supabase.Gotrue.GenerateLinkEmailChangeCurrentOptions.#ctor(System.String,System.String)">
+            <summary>
+            Constructs options for <see cref="F:Supabase.Gotrue.GenerateLinkOptions.LinkType.EmailChangeCurrent"/>
+            </summary>
+            <param name="email"></param>
+            <param name="newEmail"></param>
+        </member>
         <member name="T:Supabase.Gotrue.GenerateLinkEmailChangeNewOptions">
             <summary>
             Shortcut options for <see cref="F:Supabase.Gotrue.GenerateLinkOptions.LinkType.EmailChangeNew"/>
             </summary>
+        </member>
+        <member name="M:Supabase.Gotrue.GenerateLinkEmailChangeNewOptions.#ctor(System.String,System.String)">
+            <summary>
+            Constructs options for <see cref="F:Supabase.Gotrue.GenerateLinkOptions.LinkType.EmailChangeNew"/>
+            </summary>
+            <param name="email"></param>
+            <param name="newEmail"></param>
         </member>
         <member name="T:Supabase.Gotrue.Helpers">
             <summary>
@@ -1031,8 +1096,7 @@
             <summary>
             Generates email links and OTPs to be sent via a custom email provider.
             </summary>
-            <param name="type">The type of link to be sent.</param>
-            <param name="options">Options for this call. `Password` is required for <see cref="F:Supabase.Gotrue.GenerateLinkOptions.LinkType.SignUp"/>, `Data` is an optional parameter for <see cref="!:GenerateLinkOptions.LinkType.Signup"/>.</param>
+            <param name="options">Options for this call. `Password` is required for <see cref="F:Supabase.Gotrue.GenerateLinkOptions.LinkType.SignUp"/>, `Data` is an optional parameter for <see cref="F:Supabase.Gotrue.GenerateLinkOptions.LinkType.SignUp"/>.</param>
             <returns></returns>
         </member>
         <member name="T:Supabase.Gotrue.Interfaces.IGotrueClient`2">
@@ -1285,6 +1349,13 @@
             <exception>
                 <cref>InvalidProviderException</cref>
             </exception>
+        </member>
+        <member name="M:Supabase.Gotrue.Interfaces.IGotrueClient`2.SignInAnonymously(Supabase.Gotrue.SignInAnonymouslyOptions)">
+            <summary>
+            Creates a new anonymous user.
+            </summary>
+            <param name="options"></param>
+            <returns>A session where the is_anonymous claim in the access token JWT set to true</returns>
         </member>
         <member name="M:Supabase.Gotrue.Interfaces.IGotrueClient`2.ExchangeCodeForSession(System.String,System.String)">
             <summary>
@@ -1913,7 +1984,12 @@
             An extended user response returned when generating a link.
             </summary>
         </member>
-        <!-- Badly formed XML comment ignored for member "P:Supabase.Gotrue.Responses.GenerateLinkResponse.ActionLink" -->
+        <member name="P:Supabase.Gotrue.Responses.GenerateLinkResponse.ActionLink">
+            <summary>
+            The email link to send to the user.
+            The action_link follows the following format: auth/v1/verify?type={verification_type}&amp;token={hashed_token}&amp;redirect_to={redirect_to}
+            </summary>
+        </member>
         <member name="P:Supabase.Gotrue.Responses.GenerateLinkResponse.EmailOtp">
             <summary>
             The raw email OTP.
@@ -1955,6 +2031,18 @@
         <member name="T:Supabase.Gotrue.Settings">
             <summary>
             Settings data retrieved from the GoTrue server.
+            </summary>
+        </member>
+        <member name="P:Supabase.Gotrue.SignInAnonymouslyOptions.Data">
+             <summary>
+              A custom data object to store the user's metadata. This maps to the `auth.users.raw_user_meta_data` column.
+            
+             The `data` should be a JSON serializable object that includes user-specific info, such as their first and last name.
+             </summary>
+        </member>
+        <member name="P:Supabase.Gotrue.SignInAnonymouslyOptions.CaptchaToken">
+            <summary>
+            Verification token received when the user completes the captcha on the site.
             </summary>
         </member>
         <member name="T:Supabase.Gotrue.SignInOptions">
