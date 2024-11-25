@@ -1,32 +1,27 @@
 using UnityEngine;
 using Supabase;
-using Supabase.Interfaces;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using Postgrest.Models;
 using TMPro;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class TriviaSelection : MonoBehaviour
+public class TriviaSelectionWithButtons : MonoBehaviour
 {
-    string supabaseUrl = "https://kdeuepqvsbzorvtzlvtm.supabase.co"; //COMPLETAR
-    string supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtkZXVlcHF2c2J6b3J2dHpsdnRtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzIxODk1ODcsImV4cCI6MjA0Nzc2NTU4N30.uP62sNgRm1iiu_XzTmph71woKcZZURxOrxNdtC435no"; //COMPLETAR
-
+    string supabaseUrl = "https://kdeuepqvsbzorvtzlvtm.supabase.co"; // COMPLETAR
+    string supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtkZXVlcHF2c2J6b3J2dHpsdnRtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzIxODk1ODcsImV4cCI6MjA0Nzc2NTU4N30.uP62sNgRm1iiu_XzTmph71woKcZZURxOrxNdtC435no"; // COMPLETAR
 
     Supabase.Client clientSupabase;
-
     List<trivia> trivias = new List<trivia>();
-    [SerializeField] TMP_Dropdown _dropdown;
 
-    public DatabaseManager databaseManager;
+    [SerializeField] private List<TMP_Text> buttonLabels; // Textos de los botones
+    [SerializeField] private List<UnityEngine.UI.Button> categoryButtons; // Referencia a los 6 botones
 
     async void Start()
     {
         clientSupabase = new Supabase.Client(supabaseUrl, supabaseKey);
 
         await SelectTrivias();
-        PopulateDropdown();
+        AssignCategoriesToButtons();
     }
 
     async Task SelectTrivias()
@@ -39,40 +34,33 @@ public class TriviaSelection : MonoBehaviour
         if (response != null)
         {
             trivias = response.Models;
-            //Debug.Log("Trivias seleccionadas: " + trivias.Count);
-            //foreach (var trivia in trivias)
-            //{
-            //    Debug.Log("ID: " + trivia.id + ", Categor�a: " + trivia.category);
-            //}
         }
-
     }
 
-    void PopulateDropdown()
+    void AssignCategoriesToButtons()
     {
-        
-        _dropdown.ClearOptions();
-
-        List<string> categories = new List<string>();
-
-        foreach (var trivia in trivias)
+        // Asegúrate de que haya exactamente 6 categorías
+        if (trivias.Count < 6)
         {
-            categories.Add(trivia.category);
+            Debug.LogError("No hay suficientes categorías en la base de datos.");
+            return;
         }
 
-        _dropdown.AddOptions(categories);
+        for (int i = 0; i < 6; i++)
+        {
+            string category = trivias[i].category;
+            buttonLabels[i].text = category;
+
+            int categoryIndex = i + 1; // Esto es para que coincida con la lógica de PlayerPrefs
+            categoryButtons[i].onClick.AddListener(() => OnCategoryButtonClicked(category, categoryIndex));
+        }
     }
 
-    public void OnStartButtonClicked()
+    void OnCategoryButtonClicked(string category, int index)
     {
-        int selectedIndex = _dropdown.value;
-        string selectedTrivia = _dropdown.options[selectedIndex].text;
-
-        PlayerPrefs.SetInt("SelectedIndex", selectedIndex+1);
-        PlayerPrefs.SetString("SelectedTrivia", selectedTrivia);
-
+        PlayerPrefs.SetInt("SelectedIndex", index);
+        PlayerPrefs.SetString("SelectedTrivia", category);
 
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
-
 }
