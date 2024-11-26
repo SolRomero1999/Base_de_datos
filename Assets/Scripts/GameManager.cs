@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public List<question> responseList; //lista donde guardo la respuesta de la query hecha en la pantalla de selección de categoría
+    public List<question> responseList; // Lista donde guardo la respuesta de la query hecha en la pantalla de selección de categoría
     public int currentTriviaIndex = 0;
     public int randomQuestionIndex = 0;
     public List<string> _answers = new List<string>();
@@ -15,6 +15,9 @@ public class GameManager : MonoBehaviour
     public int _numQuestionAnswered = 0;
     string _correctAnswer;
     public int currentLives = 3;
+
+    // Lista para almacenar los índices de las preguntas ya seleccionadas
+    private List<int> usedQuestionsIndices = new List<int>();
 
     public static GameManager Instance { get; private set; }
 
@@ -40,16 +43,24 @@ public class GameManager : MonoBehaviour
 
     void StartTrivia()
     {
-
+        // Lógica inicial de la trivia
     }
-    
+
     public void CategoryAndQuestionQuery(bool isCalled)
     {
         isCalled = UIManagment.Instance.queryCalled;
 
         if (!isCalled)
         {
-            randomQuestionIndex = Random.Range(0, GameManager.Instance.responseList.Count);
+            // Generar un índice aleatorio único
+            do
+            {
+                randomQuestionIndex = Random.Range(0, GameManager.Instance.responseList.Count);
+            }
+            while (usedQuestionsIndices.Contains(randomQuestionIndex));  // Verifica si ya se ha usado este índice
+
+            // Agregar el índice de la pregunta seleccionada a la lista de preguntas usadas
+            usedQuestionsIndices.Add(randomQuestionIndex);
 
             _correctAnswer = GameManager.Instance.responseList[randomQuestionIndex].CorrectOption;
 
@@ -74,10 +85,17 @@ public class GameManager : MonoBehaviour
             }
 
             UIManagment.Instance.queryCalled = true;
+
+            // Verificar si ya no hay más preguntas disponibles
+            if (usedQuestionsIndices.Count >= responseList.Count)
+            {
+                // Si ya no hay más preguntas, ir a la escena de selección de categoría
+                GoToTriviaSelectScene();
+            }
         }
     }
 
- // Método para restar una vida
+    // Método para restar una vida
     public void LoseLife()
     {
         currentLives--;
@@ -104,4 +122,11 @@ public class GameManager : MonoBehaviour
         Debug.Log("¡Se han agotado las vidas! Fin de la ronda.");
         SceneManager.LoadScene("EndRoundScene"); // Cambia a la escena de fin de ronda
     }
+
+    // Método para ir a la escena de selección de categoría (TriviaSelectScene)
+    private void GoToTriviaSelectScene()
+    {
+        SceneManager.LoadScene("TriviaSelectScene"); // Cambia a la escena de selección de categoría
+    }
 }
+
