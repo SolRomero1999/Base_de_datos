@@ -8,9 +8,9 @@ using UnityEngine.SceneManagement;
 public class UIEnd : MonoBehaviour
 {
 
-public void LoadLoginScene()
+public void LoadTriviaScene()
 {
-    SceneManager.LoadScene("LoginScene");
+    SceneManager.LoadScene("TriviaSelectScene");
 }
 
 }
