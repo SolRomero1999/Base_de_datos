@@ -521,6 +521,7 @@ MonoBehaviour:
   _answers: []
   queryCalled: 0
   _numQuestionAnswered: 0
+  currentLives: 3
 --- !u!4 &440389291
 Transform:
   m_ObjectHideFlags: 0

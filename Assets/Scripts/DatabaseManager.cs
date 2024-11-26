@@ -24,7 +24,6 @@ public class DatabaseManager : MonoBehaviour
         
         index = PlayerPrefs.GetInt("SelectedIndex");
 
-        //print(_selectedTrivia);
 
         await LoadTriviaData(index);
     }

@@ -51,8 +51,8 @@ public class TriviaSelectionWithButtons : MonoBehaviour
             string category = trivias[i].category;
             buttonLabels[i].text = category;
 
-            int categoryIndex = i + 1; // Esto es para que coincida con la lógica de PlayerPrefs
-            categoryButtons[i].onClick.AddListener(() => OnCategoryButtonClicked(category, categoryIndex));
+        int triviaId = trivias[i].id;
+        categoryButtons[i].onClick.AddListener(() => OnCategoryButtonClicked(category, triviaId));
         }
     }
 
