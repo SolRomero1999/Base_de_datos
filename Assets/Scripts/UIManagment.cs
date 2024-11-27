@@ -132,8 +132,12 @@ public class UIManagment : MonoBehaviour
 
     public void PreviousScene()
     {
-        Destroy(GameManager.Instance);
-        Destroy(UIManagment.Instance);
+        // Destruir explícitamente las instancias de GameManager y UIManagment
+        Destroy(GameManager.Instance.gameObject);
+        Destroy(UIManagment.Instance.gameObject);
+
+        // Cargar la escena anterior
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
     }
+
 }

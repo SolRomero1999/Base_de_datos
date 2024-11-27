@@ -113,6 +113,9 @@ public class GameManager : MonoBehaviour
 
     private void GoToTriviaSelectScene()
     {
+        // Destruir explícitamente las instancias de GameManager y UIManagment
+        Destroy(GameManager.Instance.gameObject);
+        Destroy(UIManagment.Instance.gameObject);
         SceneManager.LoadScene("TriviaSelectScene");
     }
 }
