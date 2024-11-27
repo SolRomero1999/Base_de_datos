@@ -66,10 +66,12 @@ public void LoadTriviaSelectScene()
         }
         else
         {
-            Debug.Log("Respuesta incorrecta. Inténtalo de nuevo.");
+            Debug.Log("Respuesta incorrecta");
             GameManager.Instance.LoseLife(); // Resta una vida al jugador
             ChangeButtonColor(buttonIndex, Color.red);
             Invoke("RestoreButtonColor", 2f);
+            GameManager.Instance._answers.Clear();
+            Invoke("NextAnswer", 2f);
         }
     }
 
