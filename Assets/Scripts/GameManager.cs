@@ -23,7 +23,6 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
-        // Configura la instancia
         if (Instance == null)
         {
             Instance = this;
@@ -52,55 +51,46 @@ public class GameManager : MonoBehaviour
 
         if (!isCalled)
         {
-            // Generar un índice aleatorio único
             do
             {
-                randomQuestionIndex = Random.Range(0, GameManager.Instance.responseList.Count);
+                randomQuestionIndex = Random.Range(0, responseList.Count);
             }
-            while (usedQuestionsIndices.Contains(randomQuestionIndex));  // Verifica si ya se ha usado este índice
+            while (usedQuestionsIndices.Contains(randomQuestionIndex));
 
-            // Agregar el índice de la pregunta seleccionada a la lista de preguntas usadas
             usedQuestionsIndices.Add(randomQuestionIndex);
 
-            _correctAnswer = GameManager.Instance.responseList[randomQuestionIndex].CorrectOption;
+            _correctAnswer = responseList[randomQuestionIndex].CorrectOption;
 
-            _answers.Clear(); // Limpia la lista de respuestas previas
-            _answers.Add(GameManager.Instance.responseList[randomQuestionIndex].Answer1);
-            _answers.Add(GameManager.Instance.responseList[randomQuestionIndex].Answer2);
-            _answers.Add(GameManager.Instance.responseList[randomQuestionIndex].Answer3);
+            _answers.Clear();
+            _answers.Add(responseList[randomQuestionIndex].Answer1);
+            _answers.Add(responseList[randomQuestionIndex].Answer2);
+            _answers.Add(responseList[randomQuestionIndex].Answer3);
 
-            // Mezcla las respuestas
             _answers.Shuffle();
 
-            // Asigna las respuestas a los botones
             for (int i = 0; i < UIManagment.Instance._buttons.Length; i++)
             {
-                // Limpia los listeners anteriores
                 UIManagment.Instance._buttons[i].onClick.RemoveAllListeners();
 
-                // Asigna la nueva respuesta al botón
                 int index = i;
                 UIManagment.Instance._buttons[i].GetComponentInChildren<TextMeshProUGUI>().text = _answers[index];
                 UIManagment.Instance._buttons[i].onClick.AddListener(() => UIManagment.Instance.OnButtonClick(index));
             }
 
             UIManagment.Instance.queryCalled = true;
+            UIManagment.Instance.ResetTimer(); // Reinicia el temporizador
 
-            // Verificar si ya no hay más preguntas disponibles
             if (usedQuestionsIndices.Count >= responseList.Count)
             {
-                // Si ya no hay más preguntas, ir a la escena de selección de categoría
                 GoToTriviaSelectScene();
             }
         }
     }
 
-    // Método para restar una vida
     public void LoseLife()
     {
         currentLives--;
 
-        // Actualiza la visualización de las vidas en la UI
         UILivesManager uiLivesManager = FindObjectOfType<UILivesManager>();
         if (uiLivesManager != null)
         {
@@ -109,24 +99,20 @@ public class GameManager : MonoBehaviour
 
         Debug.Log("Vidas restantes: " + currentLives);
 
-        // Si el jugador se queda sin vidas, se pasa a la escena de fin de ronda
         if (currentLives <= 0)
         {
             EndRound();
         }
     }
 
-    // Método para finalizar la ronda
     private void EndRound()
     {
         Debug.Log("¡Se han agotado las vidas! Fin de la ronda.");
-        SceneManager.LoadScene("EndRoundScene"); // Cambia a la escena de fin de ronda
+        SceneManager.LoadScene("EndRoundScene");
     }
 
-    // Método para ir a la escena de selección de categoría (TriviaSelectScene)
     private void GoToTriviaSelectScene()
     {
-        SceneManager.LoadScene("TriviaSelectScene"); // Cambia a la escena de selección de categoría
+        SceneManager.LoadScene("TriviaSelectScene");
     }
 }
-

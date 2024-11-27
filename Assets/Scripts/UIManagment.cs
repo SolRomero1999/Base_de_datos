@@ -9,6 +9,9 @@ public class UIManagment : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI _categoryText;
     [SerializeField] TextMeshProUGUI _questionText;
+    [SerializeField] TextMeshProUGUI _timerText;
+    private float _timer = 10f; // El temporizador inicial en segundos
+    private bool _isTimerRunning = false;
 
     string _correctAnswer;
     public Button[] _buttons = new Button[3];
@@ -18,11 +21,10 @@ public class UIManagment : MonoBehaviour
     private Color _originalButtonColor;
     public static UIManagment Instance { get; private set; }
 
-public void LoadTriviaSelectScene()
-{
-    SceneManager.LoadScene("TriviaSelectScene");
-}
-
+    public void LoadTriviaSelectScene()
+    {
+        SceneManager.LoadScene("TriviaSelectScene");
+    }
 
     void Awake()
     {
@@ -46,6 +48,20 @@ public void LoadTriviaSelectScene()
 
     void Update()
     {
+        if (_isTimerRunning)
+        {
+            _timer -= Time.deltaTime;
+            _timer = Mathf.Max(_timer, 0); // Asegura que el tiempo no se vuelva negativo
+
+            _timerText.text = Mathf.CeilToInt(_timer).ToString(); // Muestra el tiempo restante en el texto
+
+            if (_timer <= 0)
+            {
+                _isTimerRunning = false;
+                OnTimeUp();
+            }
+        }
+
         _categoryText.text = PlayerPrefs.GetString("SelectedTrivia");
         _questionText.text = GameManager.Instance.responseList[GameManager.Instance.randomQuestionIndex].QuestionText;
         GameManager.Instance.CategoryAndQuestionQuery(queryCalled);
@@ -93,6 +109,25 @@ public void LoadTriviaSelectScene()
     private void NextAnswer()
     {
         queryCalled = false;
+        ResetTimer();
+    }
+
+    private void OnTimeUp()
+    {
+        Debug.Log("¡El tiempo se ha agotado!");
+        GameManager.Instance.LoseLife(); // Resta una vida
+
+        if (GameManager.Instance.currentLives > 0)
+        {
+            queryCalled = false;
+            NextAnswer();
+        }
+    }
+
+    public void ResetTimer()
+    {
+        _timer = 10f;
+        _isTimerRunning = true;
     }
 
     public void PreviousScene()
@@ -102,4 +137,3 @@ public void LoadTriviaSelectScene()
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
     }
 }
-
