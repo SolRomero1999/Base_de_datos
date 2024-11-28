@@ -10,8 +10,11 @@ public class UIManagment : MonoBehaviour
     [SerializeField] TextMeshProUGUI _categoryText;
     [SerializeField] TextMeshProUGUI _questionText;
     [SerializeField] TextMeshProUGUI _timerText;
+    [SerializeField] TextMeshProUGUI _scoreText; // Para mostrar la puntuación
     private float _timer = 10f; // El temporizador inicial en segundos
     private bool _isTimerRunning = false;
+
+    private int _score = 0; // Puntuación inicial
 
     string _correctAnswer;
     public Button[] _buttons = new Button[3];
@@ -76,6 +79,7 @@ public class UIManagment : MonoBehaviour
         {
             Debug.Log("¡Respuesta correcta!");
             ChangeButtonColor(buttonIndex, Color.green);
+            AddPoints(10); // Sumar 10 puntos por respuesta correcta
             Invoke("RestoreButtonColor", 2f);
             GameManager.Instance._answers.Clear();
             Invoke("NextAnswer", 2f);
@@ -84,6 +88,7 @@ public class UIManagment : MonoBehaviour
         {
             Debug.Log("Respuesta incorrecta");
             GameManager.Instance.LoseLife(); // Resta una vida al jugador
+            SubtractPoints(5); // Restar 5 puntos por respuesta incorrecta
             ChangeButtonColor(buttonIndex, Color.red);
             Invoke("RestoreButtonColor", 2f);
             GameManager.Instance._answers.Clear();
@@ -116,6 +121,7 @@ public class UIManagment : MonoBehaviour
     {
         Debug.Log("¡El tiempo se ha agotado!");
         GameManager.Instance.LoseLife(); // Resta una vida
+        SubtractPoints(5); // Restar 5 puntos cuando el tiempo se acaba
 
         if (GameManager.Instance.currentLives > 0)
         {
@@ -140,4 +146,31 @@ public class UIManagment : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
     }
 
+    // Métodos para actualizar la puntuación
+    public void AddPoints(int points)
+    {
+        _score += points;
+        UpdateScoreDisplay(Color.green); // Poner en verde cuando se suman puntos
+    }
+
+    public void SubtractPoints(int points)
+    {
+        _score -= points;
+        UpdateScoreDisplay(Color.red); // Poner en rojo cuando se restan puntos
+    }
+
+    private void UpdateScoreDisplay(Color textColor)
+    {
+        _scoreText.text = _score.ToString();
+        StartCoroutine(ChangeScoreColor(textColor));
+    }
+
+    // Corutina para cambiar el color de la puntuación temporalmente
+    private IEnumerator ChangeScoreColor(Color targetColor)
+    {
+        _scoreText.color = targetColor; // Cambiar el color a verde o rojo
+        yield return new WaitForSeconds(1f); // Esperar 1 segundo
+        _scoreText.color = Color.white; // Volver a blanco
+    }
 }
+

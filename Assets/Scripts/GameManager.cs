@@ -10,8 +10,6 @@ public class GameManager : MonoBehaviour
     public int randomQuestionIndex = 0;
     public List<string> _answers = new List<string>();
     public bool queryCalled;
-    private int _points;
-    private int _maxAttempts = 10;
     public int _numQuestionAnswered = 0;
     string _correctAnswer;
     public int currentLives = 3;
