@@ -51,16 +51,14 @@ public class TriviaSelectionWithButtons : MonoBehaviour
             string category = trivias[i].category;
             buttonLabels[i].text = category;
 
-            // Aquí se asegura de que pasas el ID de la trivia en lugar de un índice
             int triviaId = trivias[i].id;
             categoryButtons[i].onClick.AddListener(() => OnCategoryButtonClicked(category, triviaId));
         }
     }
 
-    void OnCategoryButtonClicked(string category, int triviaId)
+    void OnCategoryButtonClicked(string category, int index)
     {
-        // Guardar tanto el nombre de la categoría como el ID de la categoría seleccionada
-        PlayerPrefs.SetInt("SelectedTriviaID", triviaId);
+        PlayerPrefs.SetInt("SelectedIndex", index);
         PlayerPrefs.SetString("SelectedTrivia", category);
 
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
