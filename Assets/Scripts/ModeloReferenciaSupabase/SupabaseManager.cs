@@ -1,13 +1,12 @@
 using UnityEngine;
 using Supabase;
 using Supabase.Interfaces;
-using System.Threading;
+using System.Threading.Tasks;
 using Postgrest.Models;
 using TMPro;
 using UnityEngine.UI;
-using System.Threading.Tasks;
+using System.Threading;
 using UnityEngine.SceneManagement;
-
 
 public class SupabaseManager : MonoBehaviour
 {
@@ -40,7 +39,7 @@ public class SupabaseManager : MonoBehaviour
         // Filtra según los datos de login
         var login_password = await clientSupabase
             .From<usuarios>()
-            .Select("password")
+            .Select("password, id")
             .Where(usuarios => usuarios.username == _userIDInput.text)
             .Get();
 
@@ -54,6 +53,9 @@ public class SupabaseManager : MonoBehaviour
                 print("LOGIN SUCCESSFUL");
                 _stateText.text = "LOGIN SUCCESSFUL";
                 _stateText.color = Color.green;
+
+                // Guardar el id del usuario
+                PlayerPrefs.SetInt("UserID", login_password.Models[0].id);
 
                 // Cargar la siguiente escena después de un login exitoso
                 SceneManager.LoadScene("TriviaSelectScene");
@@ -120,3 +122,4 @@ public class SupabaseManager : MonoBehaviour
         }
     }
 }
+
