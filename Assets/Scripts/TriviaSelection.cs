@@ -16,6 +16,10 @@ public class TriviaSelectionWithButtons : MonoBehaviour
     [SerializeField] private List<TMP_Text> buttonLabels; // Textos de los botones
     [SerializeField] private List<UnityEngine.UI.Button> categoryButtons; // Referencia a los 6 botones
 
+    // Referencias estáticas para acceder desde otros scripts
+    public static string selectedCategory;  // Categoria seleccionada
+    public static int selectedTriviaId;    // Id de la trivia seleccionada
+
     async void Start()
     {
         clientSupabase = new Supabase.Client(supabaseUrl, supabaseKey);
@@ -55,9 +59,14 @@ public class TriviaSelectionWithButtons : MonoBehaviour
             categoryButtons[i].onClick.AddListener(() => OnCategoryButtonClicked(category, triviaId));
         }
     }
-    void OnCategoryButtonClicked(string category, int index)
+
+    void OnCategoryButtonClicked(string category, int triviaId)
     {
-        PlayerPrefs.SetInt("SelectedIndex", index);
+        // Asignar las referencias estáticas
+        selectedCategory = category;
+        selectedTriviaId = triviaId;
+
+        PlayerPrefs.SetInt("SelectedIndex", triviaId);
         PlayerPrefs.SetString("SelectedTrivia", category);
 
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);

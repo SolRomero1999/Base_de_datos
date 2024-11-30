@@ -21,20 +21,20 @@ public class UIEnd : MonoBehaviour
         InsertarPuntaje(finalScore);
     }
 
-
     public async void InsertarPuntaje(int finalScore)
     {
         // Recuperar el usuario actual de la referencia estática
         int usuarioId = SupabaseManager.currentUserId;  // Usamos la variable estática del SupabaseManager
 
         // Recuperar la categoría actual de la referencia estática
-        //int categoriaId = TriviaSelectionWithButtons.selectedTriviaId;  // Usamos la variable estática de TriviaSelectionWithButtons
+        string selectedCategory = TriviaSelectionWithButtons.selectedCategory;  // Usamos la variable estática de TriviaSelectionWithButtons
+        int selectedTriviaId = TriviaSelectionWithButtons.selectedTriviaId;  // Usamos la variable estática de TriviaSelectionWithButtons
 
         // Crear el nuevo puntaje
         var nuevoPuntaje = new score
         {
             usuario_id = usuarioId,      // ID del usuario
-            //categoria_id = categoriaId,  // ID de la categoría de trivia
+            categoria_id = selectedTriviaId,  // ID de la categoría de trivia
             puntaje = finalScore         // Puntaje final obtenido
         };
 
@@ -42,7 +42,7 @@ public class UIEnd : MonoBehaviour
         Debug.Log("Intentando insertar puntaje:");
         Debug.Log("Puntaje: " + finalScore);
         Debug.Log("UsuarioID: " + usuarioId);
-      //  Debug.Log("CategoriaID: " + categoriaId);
+        Debug.Log("CategoriaID: " + selectedTriviaId);
 
         // Crear el cliente de Supabase
         clientSupabase = new Supabase.Client(supabaseUrl, supabaseKey);
@@ -80,4 +80,3 @@ public class UIEnd : MonoBehaviour
         SceneManager.LoadScene("TriviaSelectScene");
     }
 }
-
