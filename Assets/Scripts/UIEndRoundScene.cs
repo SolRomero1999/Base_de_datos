@@ -13,28 +13,28 @@ public class UIEnd : MonoBehaviour
 
     void Start()
     {
-        // Recuperamos el puntaje final guardado en PlayerPrefs y lo mostramos en la pantalla
-        int finalScore = PlayerPrefs.GetInt("FinalScore", 0); // 0 es el valor por defecto si no se encuentra el puntaje
+        // Recuperamos el puntaje final real usando GetCurrentScore() de UIManagment
+        int finalScore = UIManagment.Instance.GetCurrentScore();  // Obtiene el puntaje actual
         _finalScoreText.text = "Puntaje Final: " + finalScore.ToString();
 
         // Llamar a la función para insertar el puntaje en Supabase
         InsertarPuntaje(finalScore);
     }
 
+
     public async void InsertarPuntaje(int finalScore)
     {
-        // Obtener el usuario actual (deberías tener un sistema de autenticación)
-        // Suponiendo que el ID de usuario se guarda en PlayerPrefs o de alguna manera en tu juego
-        int usuarioId = PlayerPrefs.GetInt("UsuarioID", 0);  // Obtener el ID del usuario actual
+        // Recuperar el usuario actual de la referencia estática
+        int usuarioId = SupabaseManager.currentUserId;  // Usamos la variable estática del SupabaseManager
 
-        // Obtener la categoría actual (esto puede venir de un sistema que mantenga la categoría seleccionada)
-        int categoriaId = PlayerPrefs.GetInt("CategoriaID", 0);  // Obtener el ID de la categoría actual
+        // Recuperar la categoría actual de la referencia estática
+        //int categoriaId = TriviaSelectionWithButtons.selectedTriviaId;  // Usamos la variable estática de TriviaSelectionWithButtons
 
         // Crear el nuevo puntaje
         var nuevoPuntaje = new score
         {
             usuario_id = usuarioId,      // ID del usuario
-            categoria_id = categoriaId,  // ID de la categoría de trivia
+            //categoria_id = categoriaId,  // ID de la categoría de trivia
             puntaje = finalScore         // Puntaje final obtenido
         };
 
@@ -42,7 +42,7 @@ public class UIEnd : MonoBehaviour
         Debug.Log("Intentando insertar puntaje:");
         Debug.Log("Puntaje: " + finalScore);
         Debug.Log("UsuarioID: " + usuarioId);
-        Debug.Log("CategoriaID: " + categoriaId);
+      //  Debug.Log("CategoriaID: " + categoriaId);
 
         // Crear el cliente de Supabase
         clientSupabase = new Supabase.Client(supabaseUrl, supabaseKey);
@@ -62,7 +62,6 @@ public class UIEnd : MonoBehaviour
             Debug.LogError("Error al insertar puntaje");
         }
     }
-
 
     public void LoadTriviaScene()
     {

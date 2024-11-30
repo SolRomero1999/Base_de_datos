@@ -55,7 +55,6 @@ public class TriviaSelectionWithButtons : MonoBehaviour
             categoryButtons[i].onClick.AddListener(() => OnCategoryButtonClicked(category, triviaId));
         }
     }
-
     void OnCategoryButtonClicked(string category, int index)
     {
         PlayerPrefs.SetInt("SelectedIndex", index);

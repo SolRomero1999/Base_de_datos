@@ -22,6 +22,8 @@ public class SupabaseManager : MonoBehaviour
 
     private usuarios _usuarios = new usuarios();
 
+    public static int currentUserId; // Referencia global al ID del usuario
+
     public async void UserLogin()
     {
         // Inicializa el cliente Supabase
@@ -54,8 +56,8 @@ public class SupabaseManager : MonoBehaviour
                 _stateText.text = "LOGIN SUCCESSFUL";
                 _stateText.color = Color.green;
 
-                // Guardar el id del usuario
-                PlayerPrefs.SetInt("UserID", login_password.Models[0].id);
+                // Guardar el id del usuario de manera global
+                currentUserId = login_password.Models[0].id;
 
                 // Cargar la siguiente escena después de un login exitoso
                 SceneManager.LoadScene("TriviaSelectScene");
@@ -122,4 +124,3 @@ public class SupabaseManager : MonoBehaviour
         }
     }
 }
-
