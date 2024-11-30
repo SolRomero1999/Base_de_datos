@@ -13,6 +13,9 @@ public class UIEnd : MonoBehaviour
 
     void Start()
     {
+        // Inicializa el cliente Supabase solo una vez
+        clientSupabase = new Supabase.Client(supabaseUrl, supabaseKey);
+        
         // Recuperamos el puntaje final real usando GetCurrentScore() de UIManagment
         int finalScore = UIManagment.Instance.GetCurrentScore();  // Obtiene el puntaje actual
         _finalScoreText.text = "Puntaje Final: " + finalScore.ToString();
@@ -23,31 +26,34 @@ public class UIEnd : MonoBehaviour
 
     public async void InsertarPuntaje(int finalScore)
     {
-        // Recuperar el usuario actual de la referencia estática
-        int usuarioId = SupabaseManager.currentUserId;  // Usamos la variable estática del SupabaseManager
-
-        // Recuperar la categoría actual de la referencia estática
-        string selectedCategory = TriviaSelectionWithButtons.selectedCategory;  // Usamos la variable estática de TriviaSelectionWithButtons
-        int selectedTriviaId = TriviaSelectionWithButtons.selectedTriviaId;  // Usamos la variable estática de TriviaSelectionWithButtons
-
-        // Crear el nuevo puntaje
-        var nuevoPuntaje = new score
-        {
-            usuario_id = usuarioId,      // ID del usuario
-            categoria_id = selectedTriviaId,  // ID de la categoría de trivia
-            puntaje = finalScore         // Puntaje final obtenido
-        };
-
-        // Debug: Mostrar los datos que se intentarán insertar
-        Debug.Log("Intentando insertar puntaje:");
-        Debug.Log("Puntaje: " + finalScore);
-        Debug.Log("UsuarioID: " + usuarioId);
-        Debug.Log("CategoriaID: " + selectedTriviaId);
-
-        // Crear el cliente de Supabase
+        // Inicializa el cliente Supabase
         clientSupabase = new Supabase.Client(supabaseUrl, supabaseKey);
 
-        // Insertar el puntaje en la tabla 'score'
+        // Consulta el último ID de la tabla 'score'
+        var ultimoIdResultado = await clientSupabase
+            .From<score>()
+            .Select("id")
+            .Order(score => score.id, Postgrest.Constants.Ordering.Descending)
+            .Get();
+
+        int nuevoId = 1; // Valor predeterminado si la tabla está vacía
+
+        if (ultimoIdResultado.Models.Count > 0)
+        {
+            // Obtén el último ID y calcula el nuevo
+            nuevoId = ultimoIdResultado.Models[0].id + 1;
+        }
+
+        // Crear el nuevo puntaje con el ID calculado
+        var nuevoPuntaje = new score
+        {
+            id = nuevoId,
+            usuario_id = SupabaseManager.currentUserId, // Usamos la variable estática del SupabaseManager
+            categoria_id = TriviaSelectionWithButtons.selectedTriviaId, // ID de la categoría de trivia
+            puntaje = finalScore // Puntaje final obtenido
+        };
+
+        // Insertar el nuevo puntaje
         var resultado = await clientSupabase
             .From<score>()
             .Insert(new[] { nuevoPuntaje });
@@ -59,9 +65,10 @@ public class UIEnd : MonoBehaviour
         }
         else
         {
-            Debug.LogError("Error al insertar puntaje");
+            Debug.LogError("Error al insertar puntaje: " + resultado.ResponseMessage.Content);
         }
     }
+
 
     public void LoadTriviaScene()
     {
