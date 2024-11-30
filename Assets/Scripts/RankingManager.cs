@@ -79,30 +79,43 @@ public class Ranking : MonoBehaviour
 
     void AssignCategoriesToButtons()
     {
-        // Asegúrate de que haya exactamente 6 categorías
         if (trivias.Count < 6)
         {
             Debug.LogError("No hay suficientes categorías en la base de datos.");
             return;
         }
 
-        for (int i = 0; i < 6; i++)
+        for (int i = 0; i < categoryButtons.Count; i++)
         {
-            string category = trivias[i].category;
-            buttonLabels[i].text = category;
+            if (i < trivias.Count)
+            {
+                string category = trivias[i].category;
+                buttonLabels[i].text = category;
 
-            int triviaId = trivias[i].id;
-            categoryButtons[i].onClick.AddListener(() => OnCategoryButtonClicked(category, triviaId));
+                int buttonIndex = i; // Captura el índice para usarlo en la función
+                categoryButtons[i].onClick.AddListener(() => OnCategoryButtonClickedIntermediate(buttonIndex));
+            }
+            else
+            {
+                categoryButtons[i].gameObject.SetActive(false); // Oculta botones adicionales
+            }
         }
+    }
+
+    public void OnCategoryButtonClickedIntermediate(int buttonIndex)
+    {
+        string category = trivias[buttonIndex].category;
+        int triviaId = trivias[buttonIndex].id;
+
+        OnCategoryButtonClicked(category, triviaId);
     }
 
     void OnCategoryButtonClicked(string category, int triviaId)
     {
-        // Asignar las referencias estáticas
         SelectedCategory = category;
         SelectedTriviaId = triviaId;
 
-        ShowCategory(SelectedCategory);
+        ShowCategory(category);
     }
 
     void ShowGeneral()
@@ -119,7 +132,7 @@ public class Ranking : MonoBehaviour
             }
         }
 
-        this.generalRanking.text = generalRankingText;
+        generalRanking.text = generalRankingText;
     }
 
     void ShowCategory(string category)
@@ -142,7 +155,7 @@ public class Ranking : MonoBehaviour
                 }
             }
 
-            this.categoryRanking.text = categoryRankingText;
+            categoryRanking.text = categoryRankingText;
         }
     }
 
@@ -151,3 +164,4 @@ public class Ranking : MonoBehaviour
         SceneManager.LoadScene("TriviaSelectScene");
     }
 }
+
