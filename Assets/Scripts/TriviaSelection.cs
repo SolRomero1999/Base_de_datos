@@ -71,4 +71,9 @@ public class TriviaSelectionWithButtons : MonoBehaviour
 
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
+
+    public void LoadRankingaScene()
+    {
+        SceneManager.LoadScene("Ranking");
+    }
 }

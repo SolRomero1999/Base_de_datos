@@ -17,4 +17,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/EndRoundScene.unity
     guid: e0afad1d601d46a44b092d5e6189e766
+  - enabled: 1
+    path: Assets/Scenes/VictoryScene.unity
+    guid: 05308f437058b8c4498a31af88435b37
+  - enabled: 1
+    path: Assets/Scenes/Ranking.unity
+    guid: 8099b11a0a9b7c0448bdd691979415d0
   m_configObjects: {}
