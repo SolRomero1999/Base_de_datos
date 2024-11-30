@@ -146,7 +146,6 @@ public class UIManagment : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
     }
 
-    // Métodos para actualizar la puntuación
     public void AddPoints(int points)
     {
         _score += points;
@@ -165,12 +164,15 @@ public class UIManagment : MonoBehaviour
         StartCoroutine(ChangeScoreColor(textColor));
     }
 
-    // Corutina para cambiar el color de la puntuación temporalmente
     private IEnumerator ChangeScoreColor(Color targetColor)
     {
-        _scoreText.color = targetColor; // Cambiar el color a verde o rojo
-        yield return new WaitForSeconds(1f); // Esperar 1 segundo
-        _scoreText.color = Color.white; // Volver a blanco
+        _scoreText.color = targetColor;
+        yield return new WaitForSeconds(1f);
+        _scoreText.color = Color.white;
+    }
+
+    public int GetCurrentScore()
+    {
+        return _score;
     }
 }
-

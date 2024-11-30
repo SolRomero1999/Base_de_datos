@@ -80,7 +80,7 @@ public class GameManager : MonoBehaviour
 
             if (usedQuestionsIndices.Count >= responseList.Count)
             {
-                GoToTriviaSelectScene();
+                GoToVictoryScene();
             }
         }
     }
@@ -105,15 +105,29 @@ public class GameManager : MonoBehaviour
 
     private void EndRound()
     {
-        Debug.Log("¡Se han agotado las vidas! Fin de la ronda.");
+        int finalScore = UIManagment.Instance.GetCurrentScore(); 
+        finalScore -= 5; 
+
+        PlayerPrefs.SetInt("FinalScore", finalScore);
+        PlayerPrefs.Save(); 
+
+        Destroy(GameManager.Instance.gameObject);
+        Destroy(UIManagment.Instance.gameObject);
         SceneManager.LoadScene("EndRoundScene");
     }
 
-    private void GoToTriviaSelectScene()
+
+
+    private void GoToVictoryScene()
     {
-        // Destruir explícitamente las instancias de GameManager y UIManagment
+        int finalScore = UIManagment.Instance.GetCurrentScore(); 
+        //finalScore += 10; 
+
+        PlayerPrefs.SetInt("FinalScore", finalScore);
+        PlayerPrefs.Save(); 
+
         Destroy(GameManager.Instance.gameObject);
         Destroy(UIManagment.Instance.gameObject);
-        SceneManager.LoadScene("TriviaSelectScene");
+        SceneManager.LoadScene("VictoryScene");
     }
 }
