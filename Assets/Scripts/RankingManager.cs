@@ -17,13 +17,34 @@ public class Ranking : MonoBehaviour
     List<score> attempts = new List<score>();
     List<usuarios> users = new List<usuarios>();
 
+    [Header("General Ranking References")]
+    [SerializeField] private List<TMP_Text> generalUserTexts;  // Textos para los nombres de usuarios generales
+    [SerializeField] private List<TMP_Text> generalScoreTexts; // Textos para los puntajes generales
+
+    [Header("Category Ranking References")]
+    [SerializeField] private List<TMP_Text> categoryUserTexts;  // Textos para los nombres de usuarios por categoría
+    [SerializeField] private List<TMP_Text> categoryScoreTexts; // Textos para los puntajes por categoría
+
+    [Header("Category Buttons")]
     [SerializeField] private List<TMP_Text> buttonLabels;  // Textos de los botones
     [SerializeField] private List<UnityEngine.UI.Button> categoryButtons;  // Referencias a los botones
-    [SerializeField] TMP_Text generalRanking;  // Referencia al texto de ranking general
-    [SerializeField] TMP_Text categoryRanking;  // Referencia al texto de ranking por categoría
+
+    [Header("Category Panel")]
+    [SerializeField] private GameObject categoryPanel; // Panel que cambiará de color
+    [SerializeField] private TMP_Text panelText;       // Texto del panel que cambiará de color
 
     public static int SelectedTriviaId { get; private set; }
     public static string SelectedCategory { get; private set; }
+
+    private Dictionary<string, string> categoryHexColors = new Dictionary<string, string>
+    {
+        { "Arte", "#E40025" },         
+        { "Ciencia", "#56CB63" },     
+        { "Deportes", "#F38C01" },    
+        { "Historia", "#F5DB24" },    
+        { "Geografía", "#3574D3" },   
+        { "Entretenimiento", "#E440B0" } 
+    };
 
     async void Start()
     {
@@ -115,24 +136,56 @@ public class Ranking : MonoBehaviour
         SelectedCategory = category;
         SelectedTriviaId = triviaId;
 
+        UpdatePanelAppearance(category);
         ShowCategory(category);
+    }
+
+    void UpdatePanelAppearance(string category)
+    {
+        // Verificar si la categoría tiene un color hexadecimal definido
+        if (categoryHexColors.TryGetValue(category, out string hexColor))
+        {
+            if (ColorUtility.TryParseHtmlString(hexColor, out Color panelColor))
+            {
+                // Cambiar el color del panel
+                categoryPanel.GetComponent<UnityEngine.UI.Image>().color = panelColor;
+
+                // Cambiar el texto del panel
+                panelText.text = category;
+                panelText.color = Color.white; // Mantener el texto blanco
+            }
+            else
+            {
+                Debug.LogWarning($"No se pudo convertir el color hexadecimal a Color: {hexColor}");
+            }
+        }
+        else
+        {
+            Debug.LogWarning($"Categoría no encontrada en el diccionario de colores: {category}");
+        }
     }
 
     void ShowGeneral()
     {
-        var sortedUsers = attempts.OrderByDescending(x => x.puntaje).Take(3);  // Solo los 3 mejores
+        var sortedUsers = attempts.OrderByDescending(x => x.puntaje).Take(3).ToList();  // Solo los 3 mejores
 
-        string generalRankingText = "  USUARIO           PUNTAJE\n";
-        foreach (var intento in sortedUsers)
+        for (int i = 0; i < generalUserTexts.Count; i++)
         {
-            var user = users.FirstOrDefault(u => u.id == intento.usuario_id);
-            if (user != null)
+            if (i < sortedUsers.Count)
             {
-                generalRankingText += $"{user.username,-24} {intento.puntaje}\n";
+                var user = users.FirstOrDefault(u => u.id == sortedUsers[i].usuario_id);
+                if (user != null)
+                {
+                    generalUserTexts[i].text = user.username;         // Asignar nombre de usuario
+                    generalScoreTexts[i].text = sortedUsers[i].puntaje.ToString(); // Asignar puntaje
+                }
+            }
+            else
+            {
+                generalUserTexts[i].text = "";  // Limpiar texto si no hay más usuarios
+                generalScoreTexts[i].text = "";
             }
         }
-
-        generalRanking.text = generalRankingText;
     }
 
     void ShowCategory(string category)
@@ -143,19 +196,26 @@ public class Ranking : MonoBehaviour
         {
             var categoryUsers = attempts.Where(x => x.categoria_id == selectedCategory.id)
                 .OrderByDescending(x => x.puntaje)
-                .Take(3);  // Solo los 3 mejores
+                .Take(3)
+                .ToList();  // Solo los 3 mejores
 
-            string categoryRankingText = "  USUARIO           PUNTAJE\n";
-            foreach (var intento in categoryUsers)
+            for (int i = 0; i < categoryUserTexts.Count; i++)
             {
-                var user = users.FirstOrDefault(u => u.id == intento.usuario_id);
-                if (user != null)
+                if (i < categoryUsers.Count)
                 {
-                    categoryRankingText += $"{user.username,-24} {intento.puntaje}\n";
+                    var user = users.FirstOrDefault(u => u.id == categoryUsers[i].usuario_id);
+                    if (user != null)
+                    {
+                        categoryUserTexts[i].text = user.username;         // Asignar nombre de usuario
+                        categoryScoreTexts[i].text = categoryUsers[i].puntaje.ToString(); // Asignar puntaje
+                    }
+                }
+                else
+                {
+                    categoryUserTexts[i].text = "";  // Limpiar texto si no hay más usuarios
+                    categoryScoreTexts[i].text = "";
                 }
             }
-
-            categoryRanking.text = categoryRankingText;
         }
     }
 
@@ -164,4 +224,3 @@ public class Ranking : MonoBehaviour
         SceneManager.LoadScene("TriviaSelectScene");
     }
 }
-
