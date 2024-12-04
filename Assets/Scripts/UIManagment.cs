@@ -87,8 +87,8 @@ public class UIManagment : MonoBehaviour
         else
         {
             Debug.Log("Respuesta incorrecta");
+            SubtractPoints(5);
             GameManager.Instance.LoseLife(); // Resta una vida al jugador
-            SubtractPoints(5); // Restar 5 puntos por respuesta incorrecta
             ChangeButtonColor(buttonIndex, Color.red);
             Invoke("RestoreButtonColor", 2f);
             GameManager.Instance._answers.Clear();

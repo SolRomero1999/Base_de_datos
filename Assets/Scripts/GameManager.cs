@@ -106,7 +106,6 @@ public class GameManager : MonoBehaviour
     private void EndRound()
     {
         int finalScore = UIManagment.Instance.GetCurrentScore(); 
-        finalScore -= 5; 
 
         PlayerPrefs.SetInt("FinalScore", finalScore);
         PlayerPrefs.Save(); 
@@ -121,7 +120,6 @@ public class GameManager : MonoBehaviour
     private void GoToVictoryScene()
     {
         int finalScore = UIManagment.Instance.GetCurrentScore(); 
-        //finalScore += 10; 
 
         PlayerPrefs.SetInt("FinalScore", finalScore);
         PlayerPrefs.Save(); 

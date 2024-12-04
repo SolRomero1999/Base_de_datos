@@ -13,11 +13,6 @@ public class DatabaseManager : MonoBehaviour
     Supabase.Client clientSupabase;
 
     public int index;
-
-    //UI
-    [SerializeField] private 
-
-
     async void Start()
     {
         clientSupabase = new Supabase.Client(supabaseUrl, supabaseKey);
