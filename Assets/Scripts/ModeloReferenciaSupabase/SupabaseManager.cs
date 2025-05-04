@@ -15,21 +15,19 @@ public class SupabaseManager : MonoBehaviour
     [SerializeField] TMP_InputField _userPassInput;
     [SerializeField] TextMeshProUGUI _stateText;
 
-    string supabaseUrl = "https://kdeuepqvsbzorvtzlvtm.supabase.co"; // COMPLETAR
-    string supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtkZXVlcHF2c2J6b3J2dHpsdnRtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzIxODk1ODcsImV4cCI6MjA0Nzc2NTU4N30.uP62sNgRm1iiu_XzTmph71woKcZZURxOrxNdtC435no"; // COMPLETAR
+    string supabaseUrl = "https://shauynznsmtuqfhvukvo.supabase.co"; 
+    string supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNoYXV5bnpuc210dXFmaHZ1a3ZvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDYzOTY0NjAsImV4cCI6MjA2MTk3MjQ2MH0.vLyeh7ZjtwsIYV7mWCl7jHL6KBYOpj1wVY4AK9aL-D8"; 
 
     Supabase.Client clientSupabase;
 
     private usuarios _usuarios = new usuarios();
 
-    public static int currentUserId; // Referencia global al ID del usuario
+    public static int currentUserId; 
 
     public async void UserLogin()
     {
-        // Inicializa el cliente Supabase
         clientSupabase = new Supabase.Client(supabaseUrl, supabaseKey);
 
-        // Prueba para verificar la conexión y ver todos los usuarios
         var all_users = await clientSupabase
             .From<usuarios>()
             .Select("*")

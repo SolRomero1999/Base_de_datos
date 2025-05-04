@@ -9,8 +9,5 @@ public class trivia : BaseModel
 
     [Column("Category")]
     public string category { get; set; }
-
-    // Lista de preguntas asociadas a esta trivia
     public List<question> questions { get; set; }
 }
-
